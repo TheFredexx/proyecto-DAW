@@ -1,0 +1,109 @@
+/* =========================
+   ROOT (Design Tokens)
+========================= */
+:root {
+  /* Colors */
+  --color-primary: #3498db;
+  --color-primary-hover: #2980b9;
+
+  --color-bg: #f4f7f6;
+  --color-surface: #ffffff;
+
+  --color-text-main: #333;
+  --color-text-muted: #666;
+  --color-text-light: #888;
+
+  --color-header: #2c3e50;
+  --color-border: #e5e4e7;
+
+  /* Typography */
+  --font-sans: system-ui, "Segoe UI", Roboto, sans-serif;
+  --font-mono: ui-monospace, Consolas, monospace;
+
+  /* Shadows */
+  --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 10px 25px rgba(0, 0, 0, 0.1);
+
+  /* Radius */
+  --radius: 12px;
+  --radius-sm: 8px;
+
+  /* Transitions */
+  --transition: all 0.3s ease;
+
+  font-size: 16px;
+}
+
+/* =========================
+   RESET
+========================= */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  background: var(--color-bg);
+  color: var(--color-text-main);
+
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* =========================
+   ROOT APP CONTAINER
+========================= */
+#root {
+  max-width: 1200px;
+  margin: 0 auto;
+  min-height: 100vh;
+
+  display: flex;
+  flex-direction: column;
+}
+
+/* =========================
+   TYPOGRAPHY
+========================= */
+h1,
+h2,
+h3 {
+  margin: 0;
+  font-weight: 600;
+  color: var(--color-header);
+}
+
+h1 {
+  font-size: 2.5rem;
+  margin: 32px 0;
+}
+
+h2 {
+  font-size: 1.5rem;
+  margin-bottom: 8px;
+}
+
+p {
+  margin: 0;
+}
+
+/* =========================
+   UTILITIES
+========================= */
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.hidden {
+  display: none;
+}

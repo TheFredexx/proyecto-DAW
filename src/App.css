@@ -1,0 +1,505 @@
+/* =========================
+   VARIABLES (Design System)
+========================= */
+:root {
+  --color-primary: #3498db;
+  --color-primary-hover: #2980b9;
+
+  --color-bg: #f4f7f6;
+  --color-surface: #ffffff;
+
+  --color-text-main: #333;
+  --color-text-muted: #666;
+  --color-text-light: #888;
+
+  --color-header: #2c3e50;
+  --color-border: #e5e4e7;
+
+  --border-radius: 12px;
+  --border-radius-sm: 8px;
+
+  --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 12px 30px rgba(0, 0, 0, 0.12);
+
+  --transition: all 0.25s ease;
+}
+
+/* =========================
+   RESET
+========================= */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--color-bg);
+  font-family: "Segoe UI", system-ui, sans-serif;
+  color: var(--color-text-main);
+}
+
+/* =========================
+   HEADER (PRO FIX)
+========================= */
+.app-header {
+  background: linear-gradient(135deg, #2c3e50, #34495e);
+  color: white;
+  padding: 80px 20px 70px;
+  text-align: center;
+}
+
+/* 🔥 TITLE (ARREGLADO) */
+.app-header h1 {
+  margin: 0;
+  font-size: 3rem;
+  font-weight: 700;
+  color: white; /* 🔥 IMPORTANTE */
+  letter-spacing: -1px;
+}
+
+/* SUBTITLE */
+.app-header p {
+  margin-top: 12px;
+  opacity: 0.9;
+  font-size: 1.1rem;
+}
+.app-header h1 {
+  text-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+
+/* =========================
+   CONTROLS (FIXED)
+========================= */
+.controls {
+  display: flex;
+  gap: 12px;
+
+  max-width: 720px;
+  margin: 20px auto 40px;
+
+  padding: 18px;
+
+  background: var(--color-surface);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-md);
+
+  align-items: center;
+
+  transform: translateY(-20px); /* efecto flotante limpio */
+}
+
+/* SEARCH */
+.search-wrapper {
+  position: relative;
+  flex: 2;
+}
+
+.search-wrapper input {
+  width: 100%;
+  padding: 12px 14px 12px 36px;
+
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-sm);
+
+  font-size: 0.95rem;
+  transition: var(--transition);
+}
+
+.search-wrapper input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+}
+
+/* ICON */
+.search-wrapper::before {
+  content: "🔍";
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: 0.6;
+}
+
+/* SELECT */
+.controls select {
+  flex: 1;
+  padding: 12px;
+
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-sm);
+
+  background: white;
+  cursor: pointer;
+}
+
+/* =========================
+   GRID
+========================= */
+.book-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+
+  gap: 28px;
+  padding: 20px;
+
+  max-width: 1200px;
+  margin: 0 auto 40px;
+}
+
+/* =========================
+   CARD
+========================= */
+.book-card {
+  display: flex;
+  flex-direction: column;
+
+  background: var(--color-surface);
+  border-radius: var(--border-radius);
+
+  overflow: hidden;
+  border: 1px solid #eee;
+
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+
+  min-height: 460px;
+}
+
+.book-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-md);
+}
+
+/* IMAGE */
+.card-img-container {
+  width: 100%;
+  height: 180px;
+  background: #eee;
+}
+
+.card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.card-categories {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.category-tag {
+  font-size: 0.7rem;
+  font-weight: 600;
+
+  padding: 4px 10px;
+  border-radius: 999px; /* 🔥 estilo pill */
+
+  background: linear-gradient(
+    135deg,
+    rgba(52, 152, 219, 0.15),
+    rgba(52, 152, 219, 0.05)
+  );
+
+  color: var(--color-primary);
+
+  border: 1px solid rgba(52, 152, 219, 0.3);
+
+  transition: all 0.2s ease;
+}
+
+/* hover sutil */
+.category-tag:hover {
+  background: rgba(52, 152, 219, 0.2);
+}
+
+/* NO IMAGE */
+.no-image {
+  width: 100%;
+  height: 180px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  background: linear-gradient(135deg, #f2f4f7, #e6e9ed);
+  color: #777;
+
+  gap: 6px;
+}
+
+.no-image-icon {
+  font-size: 1.8rem;
+}
+
+.no-image-text {
+  font-size: 0.8rem;
+  opacity: 0.7;
+}
+
+/* BODY */
+.card-body {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  padding: 20px;
+}
+
+.card-title {
+  font-size: 1.1rem;
+  margin: 0 0 10px;
+  color: var(--color-header);
+
+  overflow: hidden;
+  display: -webkit-box;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.card-date {
+  font-size: 0.8rem;
+  color: var(--color-text-light);
+  margin-bottom: 10px;
+}
+
+.card-excerpt {
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+
+  line-height: 1.5;
+  margin-bottom: 20px;
+
+  flex-grow: 1;
+}
+
+/* BUTTON */
+.btn-detail {
+  margin-top: auto;
+  padding: 12px;
+
+  text-align: center;
+  text-decoration: none;
+  font-weight: 600;
+
+  color: white;
+  background: var(--color-primary);
+
+  border-radius: var(--border-radius-sm);
+  transition: var(--transition);
+}
+
+.btn-detail:hover {
+  background: var(--color-primary-hover);
+}
+
+/* =========================
+   DETAILS
+========================= */
+.detail-image-wrapper {
+  width: 100%;
+}
+
+.detail-info h1 {
+  font-size: 1.8rem;
+  margin-bottom: 10px;
+}
+
+.detail-date {
+  color: var(--color-text-light);
+  margin-bottom: 12px;
+}
+
+.detail-categories {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+.detail-content {
+  margin-top: 30px;
+  line-height: 1.7;
+  font-size: 1rem;
+}
+
+/* =========================
+   LOAD MORE
+========================= */
+.loadmore-container {
+  display: flex;
+  justify-content: center;
+  margin: 40px 0;
+}
+
+.loadmore-btn {
+  padding: 14px 28px;
+
+  background: var(--color-primary);
+  color: white;
+
+  border: none;
+  border-radius: var(--border-radius);
+
+  font-weight: 600;
+  cursor: pointer;
+
+  transition: var(--transition);
+}
+
+.loadmore-btn:hover {
+  transform: translateY(-2px);
+}
+
+.loadmore-btn:disabled {
+  background: #ccc;
+}
+
+/* =========================
+   STATES
+========================= */
+.error {
+  color: red;
+  text-align: center;
+}
+
+.empty {
+  text-align: center;
+  color: var(--color-text-muted);
+}
+
+/* =========================
+   ORDER SELECT
+========================= */
+.order-container {
+  max-width: 1200px;
+  margin: 0 auto 20px;
+  padding: 0 20px;
+
+  display: flex;
+  justify-content: flex-end;
+}
+
+.order-select {
+  padding: 10px 14px;
+
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-sm);
+
+  background: white;
+  cursor: pointer;
+
+  font-size: 0.9rem;
+  transition: var(--transition);
+}
+
+.order-select:focus {
+  outline: none;
+  border-color: var(--color-primary);
+}
+
+/* =========================
+   SEARCH BUTTON
+========================= */
+.search-btn {
+  padding: 12px 18px;
+
+  border: none;
+  border-radius: 8px;
+
+  background: var(--color-primary);
+  color: white;
+
+  font-weight: 600;
+  cursor: pointer;
+
+  transition: var(--transition);
+}
+
+.search-btn:hover {
+  background: var(--color-primary-hover);
+}
+
+/* =========================
+   DETAIL PAGE (FIXED)
+========================= */
+.detail-container {
+  max-width: 1100px;
+  margin: 40px auto;
+  padding: 20px;
+}
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 40px;
+  align-items: start;
+}
+
+.detail-image {
+  width: 100%;
+  border-radius: 12px;
+}
+
+.detail-info h1 {
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+.detail-date {
+  margin-bottom: 10px;
+  color: var(--color-text-light);
+}
+
+.detail-content {
+  margin-top: 20px;
+  line-height: 1.7;
+  max-width: 800px;
+}
+
+/* =========================
+   BACK LINK (PRO)
+========================= */
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  margin-bottom: 20px;
+
+  font-size: 0.9rem;
+  font-weight: 500;
+
+  color: var(--color-primary);
+  text-decoration: none;
+
+  transition: var(--transition);
+}
+
+/* Hover bonito */
+.back-link:hover {
+  color: var(--color-primary-hover);
+  transform: translateX(-2px);
+}
+
+/* separación arriba */
+.detail-container .back-link {
+  margin-top: 10px;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+@media (max-width: 600px) {
+  .controls {
+    flex-direction: column;
+    width: 90%;
+    transform: none;
+  }
+
+  .search-wrapper,
+  .controls select {
+    width: 100%;
+  }
+}

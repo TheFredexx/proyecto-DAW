@@ -1,23 +1,54 @@
-# WordPress Book Library - React Proyecto 2º DAW
+# 📚 Biblioteca de Libros - React (2º DAW)
 
-Aplicación desarrollada con React + Vite que consume la API REST de WordPress de LeaderDreams para mostrar un catálogo de libros.
+Aplicación web desarrollada con **React + Vite** que consume la API REST de WordPress de LeaderDreams para mostrar un catálogo de libros.
 
-## Funcionalidades implementadas
-- **Consumo de API REST**: Uso de Fetch API para obtener posts y categorías.
-- **Filtrado por Categoría**: Selección dinámica de libros por género.
-- **Buscador por Título**: Filtro en tiempo real por nombre del libro (Mejora 6.2).
-- **Cargar más**: Paginación funcional mediante botón (Mejora 6.3).
-- **Página de Detalle**: Navegación con React Router para ver contenido completo (Mejora 6.1).
-- **Diseño Responsive**: Interfaz adaptada a móviles y tablets (Mejora 6.5).
+---
 
-## Cómo ejecutar el proyecto
-1. Clonar el repositorio.
-2. Ejecutar `npm install` para descargar las dependencias.
-3. Ejecutar `npm run dev` para iniciar el entorno de desarrollo.
-4. Abrir `http://localhost:5173` en el navegador.
+## Funcionalidades
 
-## Tecnologías utilizadas
-- React 19
-- React Router 7
-- CSS Grid & Flexbox
+### Funcionalidades básicas
+- Consumo de API REST (WordPress)
+- Listado de libros en formato tarjetas
+- Visualización de categorías
+- Filtrado por categoría
+- Manejo de estados (loading y errores)
+
+---
+
+### Mejoras implementadas
+- **Buscador por título** (Mejora 6.2)
+- **Página de detalle** con React Router (Mejora 6.1)
+- **Paginación** mediante navegación entre páginas (Mejora 6.3)
+- **Ordenación por fecha** (más recientes / más antiguos) (Mejora 6.4)
+- **Diseño responsive** adaptado a móvil y tablet (Mejora 6.5)
+
+---
+
+## 🛠️ Tecnologías utilizadas
+- React
+- React Router
+- Vite
 - Fetch API
+- CSS (Flexbox y Grid)
+
+---
+
+## ⚙️ Cómo ejecutar el proyecto
+
+1. Clonar el repositorio:
+```bash
+git clone <url-del-repo>
+```
+
+2. Instalar dependencias:
+```bash
+npm install
+```
+
+3. Ejecutar el proyecto:
+```bash
+npm run dev
+```
+
+4. Abrir en el navegador:
+http://localhost:5173

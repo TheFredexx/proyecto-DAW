@@ -3,19 +3,22 @@ import {
   stripHtml,
   truncateText,
   formatDate,
+  getFeaturedImage,
 } from "../utils/format";
 
 const BookCard = ({ book }) => {
-  // 🔥 FIX: NO usar placeholder → null si no hay imagen
-  const imageUrl =
-    book._embedded?.["wp:featuredmedia"]?.[0]?.source_url || null;
+  // ✅ usar utilidad correctamente
+  const imageUrl = getFeaturedImage(book);
 
+  // 🔥 FIX categorías (solo taxonomy "category")
   const categories =
-    book._embedded?.["wp:term"]?.[0] || [];
+    book._embedded?.["wp:term"]?.[0]?.filter(
+      (cat) => cat.taxonomy === "category"
+    ) || [];
 
   const title = book.title?.rendered || "Untitled";
 
-  // ✅ utils bien usadas
+  // ✅ utils bien aplicadas
   const excerpt = truncateText(
     stripHtml(book.excerpt?.rendered || "")
   );
@@ -48,6 +51,7 @@ const BookCard = ({ book }) => {
           </div>
         )}
 
+        {/* WordPress devuelve HTML en el título */}
         <h3
           className="card-title"
           dangerouslySetInnerHTML={{ __html: title }}

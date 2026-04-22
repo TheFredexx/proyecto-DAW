@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { fetchPostById } from "../services/api";
+import { formatDate, getFeaturedImage } from "../utils/format"; // 🔥 usar utils
 
 const BookDetailPage = () => {
   const { id } = useParams();
@@ -41,8 +42,8 @@ const BookDetailPage = () => {
   if (!book)
     return <p className="text-center">No hay datos disponibles</p>;
 
-  const imageUrl =
-    book._embedded?.["wp:featuredmedia"]?.[0]?.source_url;
+  // 🔥 usar utils (coherencia con BookCard)
+  const imageUrl = getFeaturedImage(book);
 
   const categories =
     book._embedded?.["wp:term"]?.[0]?.filter(
@@ -53,7 +54,7 @@ const BookDetailPage = () => {
     <div className="detail-container">
       {/* 🔙 BACK */}
       <Link to="/" className="back-link">
-        ← Volver al listado
+        Volver al listado
       </Link>
 
       <div className="detail-grid">
@@ -76,6 +77,7 @@ const BookDetailPage = () => {
 
         {/* INFO */}
         <div className="detail-info">
+          {/* WordPress devuelve HTML en el título */}
           <h1
             dangerouslySetInnerHTML={{
               __html: book.title?.rendered || "Sin título",
@@ -83,7 +85,7 @@ const BookDetailPage = () => {
           />
 
           <p className="detail-date">
-            📅 {new Date(book.date).toLocaleDateString()}
+            📅 {formatDate(book.date)}
           </p>
 
           {/* CATEGORIES */}
@@ -99,7 +101,7 @@ const BookDetailPage = () => {
         </div>
       </div>
 
-      {/* CONTENT */}
+      {/* WordPress devuelve HTML en el contenido */}
       <div
         className="detail-content"
         dangerouslySetInnerHTML={{

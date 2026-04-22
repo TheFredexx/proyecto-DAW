@@ -3,21 +3,19 @@ import { useBooks } from "../hooks/useBooks";
 
 import BookList from "../components/BookList";
 import SearchBar from "../components/SearchBar";
-import LoadMoreButton from "../components/LoadMoreButton";
+import Pagination from "../components/Pagination"; // 🔥 CAMBIO
 
 const HomePage = () => {
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("");
   const [page, setPage] = useState(1);
-
-  // 🔥 NUEVO
   const [order, setOrder] = useState("desc");
 
   const { books, loading, error, hasMore } = useBooks(
     search,
     category,
     page,
-    order // 🔥 IMPORTANTE
+    order
   );
 
   const handleSearch = (value) => {
@@ -54,7 +52,7 @@ const HomePage = () => {
         onCategoryChange={handleCategoryChange}
       />
 
-      {/* 🔥 ORDER SELECT (NUEVO) */}
+      {/* ORDER */}
       <div className="order-container">
         <select
           className="order-select"
@@ -68,9 +66,7 @@ const HomePage = () => {
 
       {/* ================= STATES ================= */}
 
-      {loading && books.length === 0 && (
-        <p className="text-center">Cargando Libros...</p>
-      )}
+      {loading && <p className="text-center">Cargando libros...</p>}
 
       {error && <p className="error">Error: {error}</p>}
 
@@ -81,17 +77,14 @@ const HomePage = () => {
       {/* ================= LIST ================= */}
       {books.length > 0 && <BookList books={books} />}
 
-      {/* ================= LOAD MORE ================= */}
+      {/* ================= PAGINATION ================= */}
       {books.length > 0 && (
-        <LoadMoreButton
-          loading={loading}
+        <Pagination
+          page={page}
           hasMore={hasMore}
-          onClick={() => setPage((p) => p + 1)}
+          onPrev={() => setPage((p) => p - 1)}
+          onNext={() => setPage((p) => p + 1)}
         />
-      )}
-
-      {loading && books.length > 0 && (
-        <p className="text-center">Cargando más libros...</p>
       )}
     </main>
   );

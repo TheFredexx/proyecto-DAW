@@ -1,4 +1,4 @@
-const LoadMoreButton = ({ loading, hasMore, onClick }) => {
+/*const LoadMoreButton = ({ loading, hasMore, onClick }) => {
     if (!hasMore) {
         return <p className="loadmore-end">No more books</p>;
     }
@@ -16,4 +16,4 @@ const LoadMoreButton = ({ loading, hasMore, onClick }) => {
     );
 };
 
-export default LoadMoreButton;
+export default LoadMoreButton;*/

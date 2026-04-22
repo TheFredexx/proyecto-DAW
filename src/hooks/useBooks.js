@@ -22,18 +22,16 @@ export const useBooks = (search, category, page, order) => {
             post.content.rendered.trim() !== ""
         );
 
-        setBooks((prev) => {
-          const combined =
-            page === 1 ? validPosts : [...prev, ...validPosts];
-
-          // ✅ ordenar por fecha
-          return [...combined].sort((a, b) => {
-            return order === "asc"
-              ? new Date(a.date) - new Date(b.date)
-              : new Date(b.date) - new Date(a.date);
-          });
+        // 🔥 IMPORTANTE: NO usar prev (paginación real)
+        const sortedPosts = [...validPosts].sort((a, b) => {
+          return order === "asc"
+            ? new Date(a.date) - new Date(b.date)
+            : new Date(b.date) - new Date(a.date);
         });
 
+        setBooks(sortedPosts);
+
+        // ✅ control de siguiente página
         setHasMore(validPosts.length > 0);
       } catch (err) {
         setError(err.message || "Error loading books");

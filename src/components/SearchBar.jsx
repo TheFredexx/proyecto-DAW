@@ -1,11 +1,14 @@
 import { useState } from "react";
-import { useCategories } from "../hooks/useCategories";
 
-const SearchBar = ({ onSearch, category, onCategoryChange }) => {
+const SearchBar = ({
+    onSearch,
+    category,
+    onCategoryChange,
+    categories,
+    loading,
+    error,
+}) => {
     const [inputValue, setInputValue] = useState("");
-
-    // ✅ cargar categorías
-    const { categories, loading, error } = useCategories();
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -43,7 +46,7 @@ const SearchBar = ({ onSearch, category, onCategoryChange }) => {
 
             {/* BUTTON */}
             <button type="submit" className="search-btn">
-                Search
+                Buscar
             </button>
         </form>
     );

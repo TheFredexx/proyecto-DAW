@@ -51,4 +51,6 @@ npm run dev
 ```
 
 4. Abrir en el navegador:
+```bash
 http://localhost:5173
+```

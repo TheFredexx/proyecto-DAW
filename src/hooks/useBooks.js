@@ -22,7 +22,7 @@ export const useBooks = (search, category, page, order) => {
             post.content.rendered.trim() !== ""
         );
 
-        // 🔥 IMPORTANTE: NO usar prev (paginación real)
+        // ✅ ordenar por fecha
         const sortedPosts = [...validPosts].sort((a, b) => {
           return order === "asc"
             ? new Date(a.date) - new Date(b.date)
@@ -31,8 +31,8 @@ export const useBooks = (search, category, page, order) => {
 
         setBooks(sortedPosts);
 
-        // ✅ control de siguiente página
-        setHasMore(validPosts.length > 0);
+        // 🔥 FIX REAL DE PAGINACIÓN
+        setHasMore(data.length === 12); // 👈 clave
       } catch (err) {
         setError(err.message || "Error loading books");
       } finally {

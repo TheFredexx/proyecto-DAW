@@ -1,6 +1,12 @@
 import { Link } from "react-router-dom";
+import {
+  stripHtml,
+  truncateText,
+  formatDate,
+} from "../utils/format";
 
 const BookCard = ({ book }) => {
+  // 🔥 FIX: NO usar placeholder → null si no hay imagen
   const imageUrl =
     book._embedded?.["wp:featuredmedia"]?.[0]?.source_url || null;
 
@@ -9,12 +15,12 @@ const BookCard = ({ book }) => {
 
   const title = book.title?.rendered || "Untitled";
 
-  const excerpt =
-    book.excerpt?.rendered
-      ?.replace(/<[^>]+>/g, "")
-      .substring(0, 120) + "...";
+  // ✅ utils bien usadas
+  const excerpt = truncateText(
+    stripHtml(book.excerpt?.rendered || "")
+  );
 
-  const date = new Date(book.date).toLocaleDateString();
+  const date = formatDate(book.date);
 
   return (
     <article className="book-card">
@@ -31,7 +37,7 @@ const BookCard = ({ book }) => {
       </div>
 
       <div className="card-body">
-        {/* 🔥 CATEGORÍAS */}
+        {/* CATEGORÍAS */}
         {categories.length > 0 && (
           <div className="card-categories">
             {categories.slice(0, 2).map((cat) => (

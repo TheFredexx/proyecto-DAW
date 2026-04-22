@@ -1,15 +1,23 @@
 import { useState } from "react";
 import { useBooks } from "../hooks/useBooks";
+import { useCategories } from "../hooks/useCategories"; // 🔥 NUEVO
 
 import BookList from "../components/BookList";
 import SearchBar from "../components/SearchBar";
-import Pagination from "../components/Pagination"; // 🔥 CAMBIO
+import Pagination from "../components/Pagination";
 
 const HomePage = () => {
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("");
   const [page, setPage] = useState(1);
   const [order, setOrder] = useState("desc");
+
+  // 🔥 CENTRALIZADO
+  const {
+    categories,
+    loading: loadingCategories,
+    error: errorCategories,
+  } = useCategories();
 
   const { books, loading, error, hasMore } = useBooks(
     search,
@@ -50,6 +58,9 @@ const HomePage = () => {
         onSearch={handleSearch}
         category={category}
         onCategoryChange={handleCategoryChange}
+        categories={categories}              // 🔥 NUEVO
+        loading={loadingCategories}          // 🔥 NUEVO
+        error={errorCategories}              // 🔥 NUEVO
       />
 
       {/* ORDER */}

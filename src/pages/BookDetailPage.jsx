@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { fetchPostById } from "../services/api";
-import { formatDate, getFeaturedImage } from "../utils/format"; // 🔥 usar utils
+import { formatDate, getFeaturedImage } from "../utils/format";
 
 const BookDetailPage = () => {
   const { id } = useParams();
-
   const [book, setBook] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -17,12 +16,10 @@ const BookDetailPage = () => {
       try {
         setLoading(true);
         setError(null);
-
         const data = await fetchPostById(Number(id));
         setBook(data);
       } catch (err) {
-        console.error(err);
-        setError(err.message || "Error loading book");
+        setError("Lo sentimos, no hemos podido encontrar el libro que buscas.");
       } finally {
         setLoading(false);
       }
@@ -31,34 +28,34 @@ const BookDetailPage = () => {
     load();
   }, [id]);
 
-  // 🔴 LOADING
-  if (loading)
-    return <p className="text-center">Cargando libro...</p>;
+  if (loading) return <p className="text-center" style={{marginTop: '50px'}}>Cargando libro...</p>;
 
-  // 🔴 ERROR
-  if (error) return <p className="error">{error}</p>;
+  if (error || !book) {
+    return (
+      <div className="detail-container not-found-view" style={{ padding: "80px 20px", textAlign: "center" }}>
+        <h2>Libro no encontrado</h2>
+        <p style={{ color: "var(--color-text-muted)", marginBottom: "30px" }}>
+          {error || "Los datos de este ejemplar no están disponibles en este momento."}
+        </p>
+        <Link to="/" className="back-link" style={{ display: "inline-block" }}>
+          Ir al catálogo principal
+        </Link>
+      </div>
+    );
+  }
 
-  // 🔴 SEGURIDAD
-  if (!book)
-    return <p className="text-center">No hay datos disponibles</p>;
-
-  // 🔥 usar utils (coherencia con BookCard)
   const imageUrl = getFeaturedImage(book);
-
-  const categories =
-    book._embedded?.["wp:term"]?.[0]?.filter(
-      (cat) => cat.taxonomy === "category"
-    ) || [];
+  const categories = book._embedded?.["wp:term"]?.[0]?.filter(
+    (cat) => cat.taxonomy === "category"
+  ) || [];
 
   return (
     <div className="detail-container">
-      {/* 🔙 BACK */}
       <Link to="/" className="back-link">
-        Volver al listado
+        ← Volver al listado
       </Link>
 
       <div className="detail-grid">
-        {/* IMAGE */}
         <div className="detail-image-wrapper">
           {imageUrl ? (
             <img
@@ -68,16 +65,12 @@ const BookDetailPage = () => {
             />
           ) : (
             <div className="no-image">
-              <span className="no-image-text">
-                No cover available
-              </span>
+              <span className="no-image-text">Sin portada disponible</span>
             </div>
           )}
         </div>
 
-        {/* INFO */}
         <div className="detail-info">
-          {/* WordPress devuelve HTML en el título */}
           <h1
             dangerouslySetInnerHTML={{
               __html: book.title?.rendered || "Sin título",
@@ -85,10 +78,9 @@ const BookDetailPage = () => {
           />
 
           <p className="detail-date">
-            📅 {formatDate(book.date)}
+            📅 Publicado el {formatDate(book.date)}
           </p>
 
-          {/* CATEGORIES */}
           {categories.length > 0 && (
             <div className="detail-categories">
               {categories.map((cat) => (
@@ -101,7 +93,6 @@ const BookDetailPage = () => {
         </div>
       </div>
 
-      {/* WordPress devuelve HTML en el contenido */}
       <div
         className="detail-content"
         dangerouslySetInnerHTML={{

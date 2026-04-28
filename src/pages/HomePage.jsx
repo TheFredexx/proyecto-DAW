@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useBooks } from "../hooks/useBooks";
-import { useCategories } from "../hooks/useCategories"; // 🔥 NUEVO
+import { useCategories } from "../hooks/useCategories";
 
 import BookList from "../components/BookList";
 import SearchBar from "../components/SearchBar";
@@ -12,7 +12,6 @@ const HomePage = () => {
   const [page, setPage] = useState(1);
   const [order, setOrder] = useState("desc");
 
-  // 🔥 CENTRALIZADO
   const {
     categories,
     loading: loadingCategories,
@@ -58,12 +57,11 @@ const HomePage = () => {
         onSearch={handleSearch}
         category={category}
         onCategoryChange={handleCategoryChange}
-        categories={categories}              // 🔥 NUEVO
-        loading={loadingCategories}          // 🔥 NUEVO
-        error={errorCategories}              // 🔥 NUEVO
+        categories={categories}
+        loading={loadingCategories}
+        error={errorCategories}
       />
 
-      {/* ORDER */}
       <div className="order-container">
         <select
           className="order-select"
@@ -75,27 +73,29 @@ const HomePage = () => {
         </select>
       </div>
 
-      {/* ================= STATES ================= */}
-
-      {loading && <p className="text-center">Cargando libros...</p>}
-
-      {error && <p className="error">Error: {error}</p>}
-
-      {!loading && books.length === 0 && !error && (
+      {/* ================= SECCIÓN DE CONTENIDO (Lógica Corregida) ================= */}
+      
+      {loading ? (
+        // 1. Si está cargando, SOLO mostramos esto
+        <div className="text-center">Cargando libros...</div>
+      ) : error ? (
+        // 2. Si hay error, mostramos el error
+        <p className="error">Error: {error}</p>
+      ) : books.length === 0 ? (
+        // 3. Si no hay libros tras cargar, mostramos "vacío"
         <p className="empty">Libros no encontrados</p>
-      )}
-
-      {/* ================= LIST ================= */}
-      {books.length > 0 && <BookList books={books} />}
-
-      {/* ================= PAGINATION ================= */}
-      {books.length > 0 && (
-        <Pagination
-          page={page}
-          hasMore={hasMore}
-          onPrev={() => setPage((p) => p - 1)}
-          onNext={() => setPage((p) => p + 1)}
-        />
+      ) : (
+        // 4. Si hay libros y no está cargando, mostramos la lista y paginación
+        <>
+          <BookList books={books} />
+          
+          <Pagination
+            page={page}
+            hasMore={hasMore}
+            onPrev={() => setPage((p) => p - 1)}
+            onNext={() => setPage((p) => p + 1)}
+          />
+        </>
       )}
     </main>
   );

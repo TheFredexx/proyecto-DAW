@@ -1,11 +1,21 @@
 function Pagination({ page, hasMore, onPrev, onNext }) {
     return (
         <div className="pagination">
-            <button onClick={onPrev} disabled={page === 1}>
+            {/* Se deshabilita si estamos en la primera página */}
+            <button 
+                onClick={onPrev} 
+                disabled={page === 1}
+            >
                 ← Anterior
             </button>
+
             <span className="page-number">Página {page}</span>
-            <button onClick={onNext} disabled={!hasMore}>
+
+            {/* Se deshabilita si hasMore es false (no hay más libros) */}
+            <button 
+                onClick={onNext} 
+                disabled={!hasMore}
+            >
                 Siguiente →
             </button>
         </div>

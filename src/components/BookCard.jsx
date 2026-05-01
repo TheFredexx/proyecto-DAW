@@ -7,21 +7,20 @@ import {
 } from "../utils/format";
 
 const BookCard = ({ book }) => {
-  // ✅ usar utilidad correctamente
   const imageUrl = getFeaturedImage(book);
+  const rawTitle = book.title?.rendered || "Sin título";
+  const cleanTitle = stripHtml(rawTitle);
 
-  // 🔥 FIX categorías (solo taxonomy "category")
   const categories =
     book._embedded?.["wp:term"]?.[0]?.filter(
       (cat) => cat.taxonomy === "category"
     ) || [];
 
-  const title = book.title?.rendered || "Untitled";
-
-  // ✅ utils bien aplicadas
-  const excerpt = truncateText(
-    stripHtml(book.excerpt?.rendered || "")
-  );
+  // Si no hay extracto, ponemos un texto amigable
+  const excerptRaw = book.excerpt?.rendered || "";
+  const excerpt = excerptRaw.trim() 
+    ? truncateText(stripHtml(excerptRaw), 120)
+    : "No hay una descripción disponible para este ejemplar.";
 
   const date = formatDate(book.date);
 
@@ -29,39 +28,41 @@ const BookCard = ({ book }) => {
     <article className="book-card">
       <div className="card-img-container">
         {imageUrl ? (
-          <img src={imageUrl} alt={title} className="card-img" />
+          <img src={imageUrl} alt={cleanTitle} className="card-img" />
         ) : (
           <div className="no-image">
-            <span className="no-image-text">
-              No cover available
-            </span>
+            <span className="no-image-text">Sin portada</span>
           </div>
         )}
       </div>
 
       <div className="card-body">
-        {/* CATEGORÍAS */}
-        {categories.length > 0 && (
-          <div className="card-categories">
-            {categories.slice(0, 2).map((cat) => (
+        <div className="card-categories">
+          {categories.length > 0 ? (
+            categories.slice(0, 2).map((cat) => (
               <span key={cat.id} className="category-tag">
                 {cat.name}
               </span>
-            ))}
-          </div>
-        )}
+            ))
+          ) : (
+            <span className="category-tag-none">Sin categoría</span>
+          )}
+        </div>
 
-        {/* WordPress devuelve HTML en el título */}
         <h3
           className="card-title"
-          dangerouslySetInnerHTML={{ __html: title }}
+          dangerouslySetInnerHTML={{ __html: rawTitle }}
         />
 
         <p className="card-date">📅 {date}</p>
 
         <p className="card-excerpt">{excerpt}</p>
 
-        <Link to={`/book/${book.id}`} className="btn-detail">
+        <Link 
+          to={`/book/${book.id}`} 
+          className="btn-detail"
+          aria-label={`Ver detalles de ${cleanTitle}`}
+        >
           Ver Detalles
         </Link>
       </div>

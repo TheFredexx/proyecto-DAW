@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { fetchPostById } from "../services/api";
-import { formatDate, getFeaturedImage } from "../utils/format";
+import { formatDate, getFeaturedImage, stripHtml } from "../utils/format";
 
 const BookDetailPage = () => {
   const { id } = useParams();
@@ -10,6 +10,7 @@ const BookDetailPage = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     if (!id) return;
 
     const load = async () => {
@@ -28,14 +29,14 @@ const BookDetailPage = () => {
     load();
   }, [id]);
 
-  if (loading) return <p className="text-center" style={{marginTop: '50px'}}>Cargando libro...</p>;
+  if (loading) return <div className="text-center" style={{marginTop: '50px'}}>Cargando libro...</div>;
 
   if (error || !book) {
     return (
       <div className="detail-container not-found-view" style={{ padding: "80px 20px", textAlign: "center" }}>
         <h2>Libro no encontrado</h2>
         <p style={{ color: "var(--color-text-muted)", marginBottom: "30px" }}>
-          {error || "Los datos de este ejemplar no están disponibles en este momento."}
+          {error || "Los datos de este ejemplar no están disponibles."}
         </p>
         <Link to="/" className="back-link" style={{ display: "inline-block" }}>
           Ir al catálogo principal
@@ -45,6 +46,9 @@ const BookDetailPage = () => {
   }
 
   const imageUrl = getFeaturedImage(book);
+  const rawTitle = book.title?.rendered || "Sin título";
+  const cleanTitle = stripHtml(rawTitle);
+
   const categories = book._embedded?.["wp:term"]?.[0]?.filter(
     (cat) => cat.taxonomy === "category"
   ) || [];
@@ -58,11 +62,7 @@ const BookDetailPage = () => {
       <div className="detail-grid">
         <div className="detail-image-wrapper">
           {imageUrl ? (
-            <img
-              src={imageUrl}
-              alt={book.title?.rendered}
-              className="detail-image"
-            />
+            <img src={imageUrl} alt={cleanTitle} className="detail-image" />
           ) : (
             <div className="no-image">
               <span className="no-image-text">Sin portada disponible</span>
@@ -71,34 +71,33 @@ const BookDetailPage = () => {
         </div>
 
         <div className="detail-info">
-          <h1
-            dangerouslySetInnerHTML={{
-              __html: book.title?.rendered || "Sin título",
-            }}
-          />
+          <h1 dangerouslySetInnerHTML={{ __html: rawTitle }} />
 
           <p className="detail-date">
             📅 Publicado el {formatDate(book.date)}
           </p>
 
-          {categories.length > 0 && (
-            <div className="detail-categories">
-              {categories.map((cat) => (
+          <div className="detail-categories">
+            {categories.length > 0 ? (
+              categories.map((cat) => (
                 <span key={cat.id} className="category-tag">
                   {cat.name}
                 </span>
-              ))}
-            </div>
-          )}
+              ))
+            ) : (
+              <span className="no-category-label">Sin categoría asignada</span>
+            )}
+          </div>
         </div>
       </div>
 
-      <div
-        className="detail-content"
-        dangerouslySetInnerHTML={{
-          __html: book.content?.rendered || "",
-        }}
-      />
+      <div className="detail-content">
+        {book.content?.rendered?.trim() ? (
+          <div dangerouslySetInnerHTML={{ __html: book.content.rendered }} />
+        ) : (
+          <p className="no-content-text">No hay una descripción extendida para este libro.</p>
+        )}
+      </div>
     </div>
   );
 };

@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
-import { fetchPosts } from "../services/api";
+import { fetchPosts, POSTS_PER_PAGE } from "../services/api";
 
-// 1. FUNCIÓN PURA: Fuera del hook para evitar recrearla en cada render y facilitar testing
 const getScore = (post, search) => {
   if (!search) return 0;
   const title = post.title?.rendered?.toLowerCase() || "";
@@ -20,26 +19,28 @@ export const useBooks = (search, category, page, order) => {
   const [hasMore, setHasMore] = useState(true);
 
   useEffect(() => {
-    // 2. CONTROL DE RACE CONDITIONS: Variable de control
     let isMounted = true;
 
-    const loadBooks = async () => {
+    const delay = search ? 500 : 0; 
+    
+    const handler = setTimeout(async () => {
       try {
         setLoading(true);
         setError(null);
 
         const data = await fetchPosts({ search, category, page });
 
-        // Si la petición tarda y el usuario ya cambió de filtro, ignoramos el resultado
         if (!isMounted) return;
 
-        // 3. FILTRADO: Limpiamos contenido vacío
-        const validPosts = data.filter(
-          (post) => post.content?.rendered?.trim()
-        );
-
-        // 4. ORDENACIÓN: Basada en la lógica de negocio requerida
-        const sortedPosts = [...validPosts].sort((a, b) => {
+        /**
+         * 🛠️ CORRECCIÓN PARA EL GRID:
+         * He eliminado el .filter() que borraba los libros sin contenido.
+         * Ahora 'data' mantiene la cantidad exacta de elementos que devuelve la API.
+         * Así el grid siempre estará lleno (12 elementos).
+         */
+        
+        // Lógica de ordenación (ahora sobre todos los libros recibidos)
+        const sortedPosts = [...data].sort((a, b) => {
           const scoreDiff = getScore(b, search) - getScore(a, search);
           
           if (scoreDiff !== 0) return scoreDiff;
@@ -51,20 +52,19 @@ export const useBooks = (search, category, page, order) => {
 
         setBooks(sortedPosts);
         
-        // El número 12 debe ser constante según tu per_page en api.js
-        setHasMore(data.length === 12);
+        // Comprobación de paginación robusta
+        setHasMore(data.length === POSTS_PER_PAGE);
+
       } catch (err) {
-        if (isMounted) setError(err.message || "Error loading books");
+        if (isMounted) setError(err.message || "Error cargando los libros");
       } finally {
         if (isMounted) setLoading(false);
       }
-    };
+    }, delay);
 
-    loadBooks();
-
-    // 5. CLEANUP FUNCTION: Se ejecuta al desmontar o antes del siguiente efecto
     return () => {
       isMounted = false;
+      clearTimeout(handler);
     };
   }, [search, category, page, order]);
 

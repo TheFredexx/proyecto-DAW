@@ -1,20 +1,20 @@
 function Pagination({ page, hasMore, onPrev, onNext }) {
     return (
         <div className="pagination">
-            {/* Se deshabilita si estamos en la primera página */}
             <button 
                 onClick={onPrev} 
                 disabled={page === 1}
+                aria-label="Página anterior"
             >
                 ← Anterior
             </button>
 
-            <span className="page-number">Página {page}</span>
+            <span className="page-number" aria-current="page">Página {page}</span>
 
-            {/* Se deshabilita si hasMore es false (no hay más libros) */}
             <button 
                 onClick={onNext} 
                 disabled={!hasMore}
+                aria-label="Página siguiente"
             >
                 Siguiente →
             </button>

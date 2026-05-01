@@ -242,6 +242,7 @@ p {
   flex-wrap: wrap;
 }
 
+/* Estilo para etiquetas con datos */
 .category-tag {
   font-size: 0.7rem;
   font-weight: 700;
@@ -250,6 +251,18 @@ p {
   background: #ebf5ee;
   color: var(--color-primary);
   border: 1px solid rgba(45, 90, 39, 0.2);
+  text-transform: uppercase;
+}
+
+/* Estilo para 'Sin categoría' (Misma estructura, tono neutro) */
+.category-tag-none, .no-category-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 5px 12px;
+  border-radius: 4px;
+  background: #f0f0f0; /* Gris claro en lugar de verde */
+  color: #888;          /* Texto atenuado */
+  border: 1px solid rgba(0, 0, 0, 0.1);
   text-transform: uppercase;
 }
 
@@ -268,6 +281,16 @@ p {
 
 .no-image-icon { font-size: 2.5rem; opacity: 0.3; }
 .no-image-text { font-size: 0.8rem; font-family: var(--font-mono); }
+
+/* Estilo extra para el texto de 'Sin descripción' en el detalle */
+.no-content-text {
+  color: var(--color-text-light);
+  font-style: italic;
+  padding: 20px;
+  background: #fafafa;
+  border-radius: 8px;
+  border: 1px dashed #ddd;
+}
 
 /* CARD BODY */
 .card-body {

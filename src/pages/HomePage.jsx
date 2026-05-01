@@ -42,7 +42,6 @@ const HomePage = () => {
 
   return (
     <main>
-      {/* ================= HEADER ================= */}
       <header className="app-header">
         <div className="hero-content">
           <h1 className="hero-title">Biblioteca</h1>
@@ -52,7 +51,6 @@ const HomePage = () => {
         </div>
       </header>
 
-      {/* ================= CONTROLS ================= */}
       <SearchBar
         onSearch={handleSearch}
         category={category}
@@ -73,26 +71,19 @@ const HomePage = () => {
         </select>
       </div>
 
-      {/* ================= SECCIÓN DE CONTENIDO (Lógica Corregida) ================= */}
-      
       {loading ? (
-        // 1. Si está cargando, SOLO mostramos esto
         <div className="text-center">Cargando libros...</div>
       ) : error ? (
-        // 2. Si hay error, mostramos el error
         <p className="error">Error: {error}</p>
       ) : books.length === 0 ? (
-        // 3. Si no hay libros tras cargar, mostramos "vacío"
         <p className="empty">Libros no encontrados</p>
       ) : (
-        // 4. Si hay libros y no está cargando, mostramos la lista y paginación
         <>
           <BookList books={books} />
-          
           <Pagination
             page={page}
             hasMore={hasMore}
-            onPrev={() => setPage((p) => p - 1)}
+            onPrev={() => setPage((p) => Math.max(1, p - 1))}
             onNext={() => setPage((p) => p + 1)}
           />
         </>

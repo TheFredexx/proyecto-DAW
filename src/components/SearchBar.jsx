@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Search } from "lucide-react";
 
 const SearchBar = ({
     onSearch,
@@ -10,23 +11,27 @@ const SearchBar = ({
 }) => {
     const [inputValue, setInputValue] = useState("");
 
-    // Sincronizar el input local con la búsqueda global si fuera necesario
-    // (Útil si limpias la búsqueda desde otro botón)
+    // 🔥 Sincronizar con estado externo
+    useEffect(() => {
+        setInputValue("");
+    }, [category]);
+
     const handleChange = (e) => {
         const value = e.target.value;
         setInputValue(value);
-        onSearch(value); // Dispara el debounce del hook useBooks
+        onSearch(value);
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        onSearch(inputValue); // Backup por si el usuario pulsa Enter rápido
+        onSearch(inputValue);
     };
 
     return (
         <form className="controls" onSubmit={handleSubmit} role="search">
             {/* SEARCH */}
             <div className="search-wrapper">
+                <Search className="search-icon" size={18} />
                 <input
                     type="text"
                     placeholder="Buscar libros por título..."
@@ -48,14 +53,16 @@ const SearchBar = ({
                 {loading && <option disabled>Cargando categorías...</option>}
                 {error && <option disabled>Error al cargar</option>}
 
-                {!loading && !error && categories.map((cat) => (
-                    <option key={cat.id} value={cat.id}>
-                        {cat.name} ({cat.count})
-                    </option>
-                ))}
+                {!loading &&
+                    !error &&
+                    categories.map((cat) => (
+                        <option key={cat.id} value={cat.id}>
+                            {cat.name} ({cat.count})
+                        </option>
+                    ))}
             </select>
 
-            {/* BUTTON - Lo mantenemos por estética y accesibilidad manual */}
+            {/* BUTTON */}
             <button type="submit" className="search-btn">
                 Buscar
             </button>

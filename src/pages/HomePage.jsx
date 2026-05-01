@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { useBooks } from "../hooks/useBooks";
 import { useCategories } from "../hooks/useCategories";
+import { BookOpen } from "lucide-react";
 
 import BookList from "../components/BookList";
 import SearchBar from "../components/SearchBar";
@@ -25,20 +26,21 @@ const HomePage = () => {
     order
   );
 
-  const handleSearch = (value) => {
+  // 🔥 useCallback para evitar recreaciones innecesarias
+  const handleSearch = useCallback((value) => {
     setSearch(value);
     setPage(1);
-  };
+  }, []);
 
-  const handleCategoryChange = (value) => {
+  const handleCategoryChange = useCallback((value) => {
     setCategory(value);
     setPage(1);
-  };
+  }, []);
 
-  const handleOrderChange = (value) => {
+  const handleOrderChange = useCallback((value) => {
     setOrder(value);
     setPage(1);
-  };
+  }, []);
 
   return (
     <main>
@@ -74,9 +76,14 @@ const HomePage = () => {
       {loading ? (
         <div className="text-center">Cargando libros...</div>
       ) : error ? (
-        <p className="error">Error: {error}</p>
+        <p className="error">
+          {error || "Ha ocurrido un error al cargar los libros"}
+        </p>
       ) : books.length === 0 ? (
-        <p className="empty">Libros no encontrados</p>
+        <p className="empty">
+          <BookOpen size={40} />
+          Libros no encontrados
+        </p>
       ) : (
         <>
           <BookList books={books} />

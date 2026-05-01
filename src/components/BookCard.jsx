@@ -5,9 +5,11 @@ import {
   formatDate,
   getFeaturedImage,
 } from "../utils/format";
+import { Calendar } from "lucide-react";
 
 const BookCard = ({ book }) => {
   const imageUrl = getFeaturedImage(book);
+
   const rawTitle = book.title?.rendered || "Sin título";
   const cleanTitle = stripHtml(rawTitle);
 
@@ -16,9 +18,11 @@ const BookCard = ({ book }) => {
       (cat) => cat.taxonomy === "category"
     ) || [];
 
-  // Si no hay extracto, ponemos un texto amigable
+  // 🔥 Procesado más limpio
   const excerptRaw = book.excerpt?.rendered || "";
-  const excerpt = excerptRaw.trim() 
+  const hasExcerpt = excerptRaw.trim().length > 0;
+
+  const excerpt = hasExcerpt
     ? truncateText(stripHtml(excerptRaw), 120)
     : "No hay una descripción disponible para este ejemplar.";
 
@@ -28,7 +32,11 @@ const BookCard = ({ book }) => {
     <article className="book-card">
       <div className="card-img-container">
         {imageUrl ? (
-          <img src={imageUrl} alt={cleanTitle} className="card-img" />
+          <img
+            src={imageUrl}
+            alt={cleanTitle}
+            className="card-img"
+          />
         ) : (
           <div className="no-image">
             <span className="no-image-text">Sin portada</span>
@@ -45,21 +53,27 @@ const BookCard = ({ book }) => {
               </span>
             ))
           ) : (
-            <span className="category-tag-none">Sin categoría</span>
+            <span className="category-tag-none">
+              Sin categoría
+            </span>
           )}
         </div>
 
-        <h3
-          className="card-title"
-          dangerouslySetInnerHTML={{ __html: rawTitle }}
-        />
+        {/* 🔥 CAMBIO: eliminamos dangerouslySetInnerHTML */}
+        <h3 className="card-title">{cleanTitle}</h3>
 
-        <p className="card-date">📅 {date}</p>
+        <p className="card-date">
+          <Calendar
+            size={14}
+            style={{ marginRight: "6px", verticalAlign: "middle" }}
+          />
+          {date}
+        </p>
 
         <p className="card-excerpt">{excerpt}</p>
 
-        <Link 
-          to={`/book/${book.id}`} 
+        <Link
+          to={`/book/${book.id}`}
           className="btn-detail"
           aria-label={`Ver detalles de ${cleanTitle}`}
         >

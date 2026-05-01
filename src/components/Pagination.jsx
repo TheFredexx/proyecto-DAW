@@ -1,25 +1,34 @@
 function Pagination({ page, hasMore, onPrev, onNext }) {
-    return (
-        <div className="pagination">
-            <button 
-                onClick={onPrev} 
-                disabled={page === 1}
-                aria-label="Página anterior"
-            >
-                ← Anterior
-            </button>
+  const isFirstPage = page === 1;
+  const isLastPage = !hasMore;
 
-            <span className="page-number" aria-current="page">Página {page}</span>
+  return (
+    <div className="pagination">
+      <button
+        type="button"
+        onClick={onPrev}
+        disabled={isFirstPage}
+        aria-disabled={isFirstPage}
+        aria-label="Página anterior"
+      >
+        ← Anterior
+      </button>
 
-            <button 
-                onClick={onNext} 
-                disabled={!hasMore}
-                aria-label="Página siguiente"
-            >
-                Siguiente →
-            </button>
-        </div>
-    );
+      <span className="page-number" aria-current="page">
+        Página {page}
+      </span>
+
+      <button
+        type="button"
+        onClick={onNext}
+        disabled={isLastPage}
+        aria-disabled={isLastPage}
+        aria-label="Página siguiente"
+      >
+        Siguiente →
+      </button>
+    </div>
+  );
 }
 
 export default Pagination;

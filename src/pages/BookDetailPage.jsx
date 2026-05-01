@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { fetchPostById } from "../services/api";
 import { formatDate, getFeaturedImage, stripHtml } from "../utils/format";
+import { Calendar } from "lucide-react";
 
 const BookDetailPage = () => {
   const { id } = useParams();
@@ -13,29 +14,58 @@ const BookDetailPage = () => {
     window.scrollTo(0, 0);
     if (!id) return;
 
+    const controller = new AbortController();
+
     const load = async () => {
       try {
         setLoading(true);
         setError(null);
-        const data = await fetchPostById(Number(id));
+
+        const data = await fetchPostById(Number(id), {
+          signal: controller.signal,
+        });
+
         setBook(data);
       } catch (err) {
-        setError("Lo sentimos, no hemos podido encontrar el libro que buscas.");
+        if (err.name !== "AbortError") {
+          setError(
+            "Lo sentimos, no hemos podido encontrar el libro que buscas."
+          );
+        }
       } finally {
-        setLoading(false);
+        if (!controller.signal.aborted) {
+          setLoading(false);
+        }
       }
     };
 
     load();
+
+    return () => {
+      controller.abort();
+    };
   }, [id]);
 
-  if (loading) return <div className="text-center" style={{marginTop: '50px'}}>Cargando libro...</div>;
+  if (loading)
+    return (
+      <div className="text-center" style={{ marginTop: "50px" }}>
+        Cargando libro...
+      </div>
+    );
 
   if (error || !book) {
     return (
-      <div className="detail-container not-found-view" style={{ padding: "80px 20px", textAlign: "center" }}>
+      <div
+        className="detail-container not-found-view"
+        style={{ padding: "80px 20px", textAlign: "center" }}
+      >
         <h2>Libro no encontrado</h2>
-        <p style={{ color: "var(--color-text-muted)", marginBottom: "30px" }}>
+        <p
+          style={{
+            color: "var(--color-text-muted)",
+            marginBottom: "30px",
+          }}
+        >
           {error || "Los datos de este ejemplar no están disponibles."}
         </p>
         <Link to="/" className="back-link" style={{ display: "inline-block" }}>
@@ -49,9 +79,10 @@ const BookDetailPage = () => {
   const rawTitle = book.title?.rendered || "Sin título";
   const cleanTitle = stripHtml(rawTitle);
 
-  const categories = book._embedded?.["wp:term"]?.[0]?.filter(
-    (cat) => cat.taxonomy === "category"
-  ) || [];
+  const categories =
+    book._embedded?.["wp:term"]?.[0]?.filter(
+      (cat) => cat.taxonomy === "category"
+    ) || [];
 
   return (
     <div className="detail-container">
@@ -62,19 +93,27 @@ const BookDetailPage = () => {
       <div className="detail-grid">
         <div className="detail-image-wrapper">
           {imageUrl ? (
-            <img src={imageUrl} alt={cleanTitle} className="detail-image" />
+            <img
+              src={imageUrl}
+              alt={cleanTitle}
+              className="detail-image"
+            />
           ) : (
             <div className="no-image">
-              <span className="no-image-text">Sin portada disponible</span>
+              <span className="no-image-text">
+                Sin portada disponible
+              </span>
             </div>
           )}
         </div>
 
         <div className="detail-info">
-          <h1 dangerouslySetInnerHTML={{ __html: rawTitle }} />
+          {/* 🔥 CAMBIO: sin HTML peligroso en título */}
+          <h1>{cleanTitle}</h1>
 
           <p className="detail-date">
-            📅 Publicado el {formatDate(book.date)}
+            <Calendar size={16} style={{ marginRight: "6px", verticalAlign: "middle" }} />
+            Publicado el {formatDate(book.date)}
           </p>
 
           <div className="detail-categories">
@@ -85,7 +124,9 @@ const BookDetailPage = () => {
                 </span>
               ))
             ) : (
-              <span className="no-category-label">Sin categoría asignada</span>
+              <span className="no-category-label">
+                Sin categoría asignada
+              </span>
             )}
           </div>
         </div>
@@ -93,9 +134,15 @@ const BookDetailPage = () => {
 
       <div className="detail-content">
         {book.content?.rendered?.trim() ? (
-          <div dangerouslySetInnerHTML={{ __html: book.content.rendered }} />
+          <div
+            dangerouslySetInnerHTML={{
+              __html: book.content.rendered,
+            }}
+          />
         ) : (
-          <p className="no-content-text">No hay una descripción extendida para este libro.</p>
+          <p className="no-content-text">
+            No hay una descripción extendida para este libro.
+          </p>
         )}
       </div>
     </div>

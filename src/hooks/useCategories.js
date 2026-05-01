@@ -7,21 +7,35 @@ export const useCategories = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    const controller = new AbortController();
+
     const loadCategories = async () => {
       try {
         setLoading(true);
         setError(null);
 
-        const data = await fetchCategories();
-        setCategories(data);
+        const data = await fetchCategories({ signal: controller.signal });
+
+        // 🧹 Filtrar categorías vacías y ordenar por nombre
+        const cleaned = data
+          .filter(cat => cat.count > 0)
+          .sort((a, b) => a.name.localeCompare(b.name));
+
+        setCategories(cleaned);
       } catch (err) {
-        setError(err.message || "Error cargando categorías");
+        if (err.name !== "AbortError") {
+          setError(err.message || "Error cargando categorías");
+        }
       } finally {
         setLoading(false);
       }
     };
 
     loadCategories();
+
+    return () => {
+      controller.abort();
+    };
   }, []);
 
   return { categories, loading, error };

@@ -19,51 +19,49 @@ export const useBooks = (search, category, page, order) => {
   const [hasMore, setHasMore] = useState(true);
 
   useEffect(() => {
-    let isMounted = true;
+    const controller = new AbortController();
+    const delay = search ? 500 : 0;
 
-    const delay = search ? 500 : 0; 
-    
     const handler = setTimeout(async () => {
       try {
         setLoading(true);
         setError(null);
 
-        const data = await fetchPosts({ search, category, page });
+        const data = await fetchPosts({
+          search,
+          category,
+          page,
+          signal: controller.signal,
+        });
 
-        if (!isMounted) return;
-
-        /**
-         * 🛠️ CORRECCIÓN PARA EL GRID:
-         * He eliminado el .filter() que borraba los libros sin contenido.
-         * Ahora 'data' mantiene la cantidad exacta de elementos que devuelve la API.
-         * Así el grid siempre estará lleno (12 elementos).
-         */
-        
-        // Lógica de ordenación (ahora sobre todos los libros recibidos)
+        // 🔥 Ordenación optimizada
         const sortedPosts = [...data].sort((a, b) => {
           const scoreDiff = getScore(b, search) - getScore(a, search);
-          
+
           if (scoreDiff !== 0) return scoreDiff;
 
-          return order === "asc"
-            ? new Date(a.date) - new Date(b.date)
-            : new Date(b.date) - new Date(a.date);
+          const dateA = new Date(a.date);
+          const dateB = new Date(b.date);
+
+          return order === "asc" ? dateA - dateB : dateB - dateA;
         });
 
         setBooks(sortedPosts);
-        
-        // Comprobación de paginación robusta
         setHasMore(data.length === POSTS_PER_PAGE);
-
       } catch (err) {
-        if (isMounted) setError(err.message || "Error cargando los libros");
+        if (err.name !== "AbortError") {
+          setError(err.message || "Error cargando los libros");
+        }
       } finally {
-        if (isMounted) setLoading(false);
+        // ⚠️ Evita estado tras abort
+        if (!controller.signal.aborted) {
+          setLoading(false);
+        }
       }
     }, delay);
 
     return () => {
-      isMounted = false;
+      controller.abort();
       clearTimeout(handler);
     };
   }, [search, category, page, order]);

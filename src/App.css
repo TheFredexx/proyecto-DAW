@@ -30,6 +30,8 @@
   --transition: all 0.3s ease-in-out;
 
   font-size: 16px;
+
+  
 }
 
 /* =========================
@@ -151,12 +153,20 @@ p {
 }
 
 .search-wrapper::before {
-  content: "🔍";
   position: absolute;
   left: 14px;
   top: 50%;
   transform: translateY(-50%);
   opacity: 0.7;
+}
+
+.search-icon {
+  position: absolute;
+  left: 12px; /* antes 14px */
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: 0.5; /* 🔥 clave */
+  pointer-events: none;
 }
 
 .controls select {
@@ -309,6 +319,9 @@ p {
 }
 
 .card-date, .detail-date {
+  display: flex;
+  align-items: center;
+  gap: 6px;
   font-size: 0.85rem;
   color: var(--color-accent);
   font-family: var(--font-mono);
@@ -537,7 +550,6 @@ p {
 
 /* Añadimos un icono de libro triste o vacío mediante CSS */
 .empty::before {
-  content: "📖"; 
   font-size: 3rem;
   filter: grayscale(1);
   opacity: 0.4;

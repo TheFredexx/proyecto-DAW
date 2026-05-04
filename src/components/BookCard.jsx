@@ -18,14 +18,12 @@ const BookCard = ({ book }) => {
       (cat) => cat.taxonomy === "category"
     ) || [];
 
-  // 🔥 Procesado más limpio
   const excerptRaw = book.excerpt?.rendered || "";
   const hasExcerpt = excerptRaw.trim().length > 0;
 
   const excerpt = hasExcerpt
     ? truncateText(stripHtml(excerptRaw), 120)
     : "No hay una descripción disponible para este ejemplar.";
-
   const date = formatDate(book.date);
 
   return (
@@ -59,9 +57,7 @@ const BookCard = ({ book }) => {
           )}
         </div>
 
-        {/* 🔥 CAMBIO: eliminamos dangerouslySetInnerHTML */}
         <h3 className="card-title">{cleanTitle}</h3>
-
         <p className="card-date">
           <Calendar
             size={14}
@@ -69,9 +65,7 @@ const BookCard = ({ book }) => {
           />
           {date}
         </p>
-
         <p className="card-excerpt">{excerpt}</p>
-
         <Link
           to={`/book/${book.id}`}
           className="btn-detail"

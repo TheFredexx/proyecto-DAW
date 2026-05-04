@@ -13,18 +13,14 @@ const BookDetailPage = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
     if (!id) return;
-
     const controller = new AbortController();
-
     const load = async () => {
       try {
         setLoading(true);
         setError(null);
-
         const data = await fetchPostById(Number(id), {
           signal: controller.signal,
         });
-
         setBook(data);
       } catch (err) {
         if (err.name !== "AbortError") {
@@ -45,7 +41,6 @@ const BookDetailPage = () => {
       controller.abort();
     };
   }, [id]);
-
   if (loading)
     return (
       <div className="text-center" style={{ marginTop: "50px" }}>
@@ -78,18 +73,15 @@ const BookDetailPage = () => {
   const imageUrl = getFeaturedImage(book);
   const rawTitle = book.title?.rendered || "Sin título";
   const cleanTitle = stripHtml(rawTitle);
-
   const categories =
     book._embedded?.["wp:term"]?.[0]?.filter(
       (cat) => cat.taxonomy === "category"
     ) || [];
-
   return (
     <div className="detail-container">
       <Link to="/" className="back-link">
         ← Volver al listado
       </Link>
-
       <div className="detail-grid">
         <div className="detail-image-wrapper">
           {imageUrl ? (
@@ -106,16 +98,12 @@ const BookDetailPage = () => {
             </div>
           )}
         </div>
-
         <div className="detail-info">
-          {/* 🔥 CAMBIO: sin HTML peligroso en título */}
           <h1>{cleanTitle}</h1>
-
           <p className="detail-date">
             <Calendar size={16} style={{ marginRight: "6px", verticalAlign: "middle" }} />
             Publicado el {formatDate(book.date)}
           </p>
-
           <div className="detail-categories">
             {categories.length > 0 ? (
               categories.map((cat) => (

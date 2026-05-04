@@ -12,13 +12,11 @@ const HomePage = () => {
   const [category, setCategory] = useState("");
   const [page, setPage] = useState(1);
   const [order, setOrder] = useState("desc");
-
   const {
     categories,
     loading: loadingCategories,
     error: errorCategories,
   } = useCategories();
-
   const { books, loading, error, hasMore } = useBooks(
     search,
     category,
@@ -26,7 +24,7 @@ const HomePage = () => {
     order
   );
 
-  // 🔥 useCallback para evitar recreaciones innecesarias
+  // useCallback para evitar recreaciones innecesarias
   const handleSearch = useCallback((value) => {
     setSearch(value);
     setPage(1);

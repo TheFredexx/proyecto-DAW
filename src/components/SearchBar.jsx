@@ -10,8 +10,6 @@ const SearchBar = ({
     error,
 }) => {
     const [inputValue, setInputValue] = useState("");
-
-    // 🔥 Sincronizar con estado externo
     useEffect(() => {
         setInputValue("");
     }, [category]);
@@ -29,7 +27,6 @@ const SearchBar = ({
 
     return (
         <form className="controls" onSubmit={handleSubmit} role="search">
-            {/* SEARCH */}
             <div className="search-wrapper">
                 <Search className="search-icon" size={18} />
                 <input
@@ -41,7 +38,6 @@ const SearchBar = ({
                 />
             </div>
 
-            {/* SELECT */}
             <select
                 value={category}
                 onChange={(e) => onCategoryChange(e.target.value)}
@@ -49,10 +45,8 @@ const SearchBar = ({
                 aria-label="Filtrar por categoría"
             >
                 <option value="">Todas las Categorías</option>
-
                 {loading && <option disabled>Cargando categorías...</option>}
                 {error && <option disabled>Error al cargar</option>}
-
                 {!loading &&
                     !error &&
                     categories.map((cat) => (
@@ -62,7 +56,6 @@ const SearchBar = ({
                     ))}
             </select>
 
-            {/* BUTTON */}
             <button type="submit" className="search-btn">
                 Buscar
             </button>

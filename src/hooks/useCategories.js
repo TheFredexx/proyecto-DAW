@@ -13,14 +13,11 @@ export const useCategories = () => {
       try {
         setLoading(true);
         setError(null);
-
         const data = await fetchCategories({ signal: controller.signal });
-
-        // 🧹 Filtrar categorías vacías y ordenar por nombre
+        //  Filtrar categorías vacías y ordenar por nombre
         const cleaned = data
-          .filter(cat => cat.count > 0)
+          .filter((cat) => cat.count > 0)
           .sort((a, b) => a.name.localeCompare(b.name));
-
         setCategories(cleaned);
       } catch (err) {
         if (err.name !== "AbortError") {

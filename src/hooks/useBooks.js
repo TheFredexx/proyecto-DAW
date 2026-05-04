@@ -5,7 +5,6 @@ const getScore = (post, search) => {
   if (!search) return 0;
   const title = post.title?.rendered?.toLowerCase() || "";
   const query = search.toLowerCase();
-
   if (title === query) return 3;
   if (title.startsWith(query)) return 2;
   if (title.includes(query)) return 1;
@@ -26,7 +25,6 @@ export const useBooks = (search, category, page, order) => {
       try {
         setLoading(true);
         setError(null);
-
         const data = await fetchPosts({
           search,
           category,
@@ -34,15 +32,12 @@ export const useBooks = (search, category, page, order) => {
           signal: controller.signal,
         });
 
-        // 🔥 Ordenación optimizada
+        // Ordenación personalizada basada en relevancia y fecha
         const sortedPosts = [...data].sort((a, b) => {
           const scoreDiff = getScore(b, search) - getScore(a, search);
-
           if (scoreDiff !== 0) return scoreDiff;
-
           const dateA = new Date(a.date);
           const dateB = new Date(b.date);
-
           return order === "asc" ? dateA - dateB : dateB - dateA;
         });
 
@@ -53,7 +48,7 @@ export const useBooks = (search, category, page, order) => {
           setError(err.message || "Error cargando los libros");
         }
       } finally {
-        // ⚠️ Evita estado tras abort
+        // Evita estado tras abortar la solicitud
         if (!controller.signal.aborted) {
           setLoading(false);
         }
